@@ -351,7 +351,9 @@ def CaseXStmt: I32EnumAttrCase<"CaseXStmt", 1, "casex">;
 def CaseZStmt: I32EnumAttrCase<"CaseZStmt", 2, "casez">;
 
 def CaseStmtTypeAttr : I32EnumAttr<"CaseStmtType", "case type",
-                                   [CaseStmt, CaseXStmt, CaseZStmt]>;
+                                   [CaseStmt, CaseXStmt, CaseZStmt]> {
+  let cppNamespace = "::circt::sv";
+}
 
 def CaseExprPatternAttr : AttrDef<SVDialect, "CaseExprPattern"> {
   let summary = "Represents a case expression pattern";
@@ -833,7 +835,9 @@ def MemBaseBin: I32EnumAttrCase<"MemBaseBin", 0>;
 def MemBaseHex: I32EnumAttrCase<"MemBaseHex", 1>;
 def MemBaseTypeAttr :
     I32EnumAttr<"MemBaseTypeAttr", "the numeric base of a memory file",
-                [MemBaseBin, MemBaseHex]>;
+                [MemBaseBin, MemBaseHex]> {
+  let cppNamespace = "circt::sv";
+}
 
 def ReadMemOp : SVOp<"readmem", [ProceduralOp]> {
   let summary = "load a memory from a file in either binary or hex format";
@@ -1008,6 +1012,7 @@ def IncludeStyle
           [I32EnumAttrCase<"Local", 0, "local">,
            I32EnumAttrCase<"System", 1, "system">]> {
   let genSpecializedAttr = 0;
+  let cppNamespace = "circt::sv";
 }
 
 def IncludeStyleAttr : EnumAttr<SVDialect, IncludeStyle, "include_style">;

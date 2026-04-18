@@ -91,7 +91,9 @@ def Arrow : I32EnumAttrCase<"Arrow", 1, "arrow">;
 
 def MemberAccessKindAttr : I32EnumAttr<"MemberAccessKind",
                                        "C++ member access kind",
-                                       [Dot, Arrow]> {}
+                                       [Dot, Arrow]>  {
+  let cppNamespace = "::circt::systemc";
+}
 
 def MemberAccessOp : SystemCOp<"cpp.member_access", [Pure]> {
   let summary = "A C++ member access expression.";

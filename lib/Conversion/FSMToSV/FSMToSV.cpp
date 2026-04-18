@@ -374,7 +374,7 @@ void MachineOpConverter::buildStateCaseMux(
 
   // Case assignments.
   caseMux = sv::CaseOp::create(
-      b, machineOp.getLoc(), CaseStmtType::CaseStmt,
+      b, machineOp.getLoc(), sv::CaseStmtType::CaseStmt,
       /*sv::ValidationQualifierTypeEnum::ValidationQualifierUnique, */ select,
       /*numCases=*/machineOp.getNumStates() + 1, [&](size_t caseIdx) {
         // Make Verilator happy for sized enums.

@@ -306,7 +306,7 @@ Value HWLegalizeModulesPass::lowerLookupToCasez(Operation &op, Value input,
 
   // Create the casez itself.
   sv::CaseOp::create(
-      builder, loc, CaseStmtType::CaseZStmt, index, caseValues.size(),
+      builder, loc, sv::CaseStmtType::CaseZStmt, index, caseValues.size(),
       [&](size_t caseIdx) -> std::unique_ptr<sv::CasePattern> {
         // Use a default pattern for the last value, even if we
         // are complete. This avoids tools thinking they need to

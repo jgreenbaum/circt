@@ -495,8 +495,8 @@ void HWMemSimImpl::generateMemory(HWModuleOp op, FirMemory mem) {
       sv::IfDefOp::create(b, "ENABLE_INITIAL_MEM_", [&]() {
         sv::InitialOp::create(b, [&]() {
           sv::ReadMemOp::create(b, reg, mem.initFilename,
-                                mem.initIsBinary ? MemBaseTypeAttr::MemBaseBin
-                                                 : MemBaseTypeAttr::MemBaseHex);
+                                mem.initIsBinary ? sv::MemBaseTypeAttr::MemBaseBin
+                                                 : sv::MemBaseTypeAttr::MemBaseHex);
         });
       });
     } else {
@@ -537,8 +537,8 @@ void HWMemSimImpl::generateMemory(HWModuleOp op, FirMemory mem) {
         auto xmr =
             sv::XMRRefOp::create(b, reg.getType(), path.getSymNameAttr());
         sv::ReadMemOp::create(b, xmr, mem.initFilename,
-                              mem.initIsBinary ? MemBaseTypeAttr::MemBaseBin
-                                               : MemBaseTypeAttr::MemBaseHex);
+                              mem.initIsBinary ? sv::MemBaseTypeAttr::MemBaseBin
+                                               : sv::MemBaseTypeAttr::MemBaseHex);
       });
 
       // Instantiate this new module inside the memory module.

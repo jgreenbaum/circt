@@ -139,7 +139,7 @@ def ModportStruct : SV_Attr<"ModportStruct", "mod_port"> {
   let assemblyFormat = "`<` struct(params) `>`";
 
   let builders = [
-    AttrOrTypeBuilder<(ins "ModportDirection":$dir, "mlir::FlatSymbolRefAttr":$sig)>
+    AttrOrTypeBuilder<(ins "::circt::sv::ModportDirection":$dir, "mlir::FlatSymbolRefAttr":$sig)>
   ];
 }
 

@@ -62,7 +62,7 @@ public:
 
     // Request a pointer to the verilated module as persistent state.
     Value state = interop::ProceduralAllocOp::create(rewriter, loc, stateType,
-                                                     InteropMechanism::CPP)
+                                                     interop::InteropMechanism::CPP)
                       .getStates()[0];
 
     insertStateInitialization(rewriter, loc, state);
@@ -85,7 +85,7 @@ private:
   void insertStateInitialization(PatternRewriter &rewriter, Location loc,
                                  Value state) const {
     auto initOp = interop::ProceduralInitOp::create(rewriter, loc, state,
-                                                    InteropMechanism::CPP);
+                                                    interop::InteropMechanism::CPP);
 
     OpBuilder initBuilder = OpBuilder::atBlockBegin(initOp.getBody());
     Value newState =
@@ -102,7 +102,7 @@ private:
                                ArrayAttr resultNames) const {
     auto updateOp = interop::ProceduralUpdateOp::create(
         rewriter, loc, resultValues.getTypes(), inputValues, stateValue,
-        InteropMechanism::CPP);
+        interop::InteropMechanism::CPP);
 
     OpBuilder updateBuilder = OpBuilder::atBlockBegin(updateOp.getBody());
 
@@ -145,11 +145,10 @@ private:
   void insertStateDeallocation(PatternRewriter &rewriter, Location loc,
                                Value state) const {
     auto deallocOp = interop::ProceduralDeallocOp::create(
-        rewriter, loc, state, InteropMechanism::CPP);
+        rewriter, loc, state, interop::InteropMechanism::CPP);
 
     OpBuilder deallocBuilder = OpBuilder::atBlockBegin(deallocOp.getBody());
-    DeleteOp::create(deallocBuilder, loc, deallocOp.getBody()->getArgument(0));
-  }
+    DeleteOp::create(deallocBuilder, loc, deallocOp.getBody()->getArgument(0));  }
 };
 } // namespace
 

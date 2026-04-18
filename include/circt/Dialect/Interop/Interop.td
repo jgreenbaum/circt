@@ -46,7 +46,9 @@ def CPP : I32EnumAttrCase<"CPP", 1, "cpp">;
 def InteropMechanismAttr : I32EnumAttr<
   "InteropMechanism",
   "interface through which interoperability is achieved",
-  [CFFI, CPP]> {}
+  [CFFI, CPP]> {
+    let cppNamespace = "::circt::interop";
+}
 
 //===----------------------------------------------------------------------===//
 // Interop Operations
