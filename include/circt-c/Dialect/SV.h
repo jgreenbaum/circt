@@ -18,18 +18,9 @@ extern "C" {
 MLIR_DECLARE_CAPI_DIALECT_REGISTRATION(SystemVerilog, sv);
 MLIR_CAPI_EXPORTED void registerSVPasses(void);
 
-//===----------------------------------------------------------------------===//
-// Attribute API.
-//===----------------------------------------------------------------------===//
-
-MLIR_CAPI_EXPORTED bool svAttrIsASVAttributeAttr(MlirAttribute);
-MLIR_CAPI_EXPORTED MlirAttribute svSVAttributeAttrGet(MlirContext,
-                                                      MlirStringRef name,
-                                                      MlirStringRef expression,
-                                                      bool emitAsComment);
-MLIR_CAPI_EXPORTED MlirStringRef svSVAttributeAttrGetName(MlirAttribute);
-MLIR_CAPI_EXPORTED MlirStringRef svSVAttributeAttrGetExpression(MlirAttribute);
-MLIR_CAPI_EXPORTED bool svSVAttributeAttrGetEmitAsComment(MlirAttribute);
+#include "circt/Dialect/SV/SVCAPIEnumAttrs.h.inc"
+#include "circt/Dialect/SV/SVCAPITypes.h.inc"
+#include "circt/Dialect/SV/SVCAPIAttrs.h.inc"
 
 #ifdef __cplusplus
 }
