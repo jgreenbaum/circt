@@ -19,8 +19,14 @@
 #include "llvm/ADT/PostOrderIterator.h"
 
 using namespace circt;
-using namespace circt::hw;
 
+// mlir-tblgen cannot generate CAPI calls for these two attrs, the .td file doesn't provide
+// of the required information. A hand implementation is provided below.
+#define NO_PARAMEXPRATTR_CAPI_DECL 1
+#define NO_INNERSYMPROPERTIESATTR_CAPI_DECL 1
+#include "circt/Dialect/HW/HWCAPIAttrs.cpp.inc"
+
+using namespace circt::hw;
 DEFINE_C_API_PTR_METHODS(HWInstanceGraph, InstanceGraph)
 DEFINE_C_API_PTR_METHODS(HWInstanceGraphNode, igraph::InstanceGraphNode)
 
@@ -274,12 +280,16 @@ MlirStringRef hwTypeAliasTypeGetScope(MlirType typeAlias) {
 // Attribute API.
 //===----------------------------------------------------------------------===//
 
+mlir::MLIRContext *get_string_attr_context(MlirAttribute attr) {
+  return llvm::cast<::mlir::StringAttr>(unwrap(attr)).getContext();
+}
+
 bool hwAttrIsAInnerSymAttr(MlirAttribute attr) {
-  return isa<InnerSymAttr>(unwrap(attr));
+  return mlirAttributeIsAcirctHwInnerSymAttr(attr);
 }
 
 MlirAttribute hwInnerSymAttrGet(MlirAttribute symName) {
-  return wrap(InnerSymAttr::get(cast<StringAttr>(unwrap(symName))));
+  return circtHwInnerSymAttrGetAlt1(wrap(get_string_attr_context(symName)), symName);
 }
 
 MlirAttribute hwInnerSymAttrGetEmpty(MlirContext ctx) {

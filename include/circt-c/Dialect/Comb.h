@@ -18,6 +18,8 @@ extern "C" {
 MLIR_CAPI_EXPORTED void registerCombPasses(void);
 MLIR_DECLARE_CAPI_DIALECT_REGISTRATION(Combinational, comb);
 
+#include "circt/Dialect/Comb/CombCAPIEnumAttrs.h.inc"
+
 #ifdef __cplusplus
 }
 #endif

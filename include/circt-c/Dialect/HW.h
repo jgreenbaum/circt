@@ -15,6 +15,13 @@
 extern "C" {
 #endif
 
+typedef int PEO;
+
+// Include mlir-tblgen functions
+#include "circt/Dialect/HW/HWCAPIEnumAttrs.h.inc"
+#include "circt/Dialect/HW/HWCAPITypes.h.inc"
+#include "circt/Dialect/HW/HWCAPIAttrs.h.inc"
+
 #define DEFINE_C_API_STRUCT(name, storage)                                     \
   struct name {                                                                \
     storage *ptr;                                                              \
