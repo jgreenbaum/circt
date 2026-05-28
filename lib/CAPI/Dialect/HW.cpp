@@ -20,10 +20,10 @@
 
 using namespace circt;
 
-// mlir-tblgen cannot generate CAPI calls for these two attrs, the .td file doesn't provide
-// of the required information. A hand implementation is provided below.
+// mlir-tblgen cannot generate CAPI calls for cit::hw::ParamExprAttr because 
+// it doesn't know that PEO is a type that shouldn't be wrapped. There is a 
+// hand modified implementation below
 #define NO_PARAMEXPRATTR_CAPI_DECL 1
-#define NO_INNERSYMPROPERTIESATTR_CAPI_DECL 1
 #include "circt/Dialect/HW/HWCAPIAttrs.cpp.inc"
 
 using namespace circt::hw;
@@ -36,6 +36,27 @@ DEFINE_C_API_PTR_METHODS(HWInstanceGraphNode, igraph::InstanceGraphNode)
 
 MLIR_DEFINE_CAPI_DIALECT_REGISTRATION(HW, hw, HWDialect)
 void registerHWPasses() { registerPasses(); }
+
+//===----------------------------------------------------------------------===//
+// ParamExprAttr - modified mlir-tblgen code
+//===----------------------------------------------------------------------===//
+
+// Skipping gettor 0 for ParamExprAttr, it has an unsupported parameter type 
+MLIR_CAPI_EXPORTED MlirTypeID circtHwParamExprAttrGetTypeID() {
+	return wrap(::circt::hw::ParamExprAttr::getTypeID());
+}
+MLIR_CAPI_EXPORTED bool mlirAttributeIsAcirctHwParamExprAttr(MlirAttribute attr) {
+	return llvm::isa<::circt::hw::ParamExprAttr>(unwrap(attr));
+}
+// Here is the by-hand change, don't wrap the return type, and return ::PEO
+// instead of circt::hw::PEO
+MLIR_CAPI_EXPORTED ::PEO circtHwParamExprAttrGetOpcode(MlirAttribute attr) {
+	return (::PEO)llvm::cast<::circt::hw::ParamExprAttr>(unwrap(attr)).getOpcode();
+}
+// Skipping accessor for unsupported parameter operands
+MLIR_CAPI_EXPORTED MlirType circtHwParamExprAttrGetType(MlirAttribute attr) {
+	return wrap(llvm::cast<::circt::hw::ParamExprAttr>(unwrap(attr)).getType());
+}
 
 //===----------------------------------------------------------------------===//
 // Type API.
