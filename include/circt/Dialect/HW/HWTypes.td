@@ -112,7 +112,7 @@ def InnerSymProperties : AttrDef<HWDialect, "InnerSymProperties"> {
   let parameters = (ins
          "::mlir::StringAttr":$name,
          DefaultValuedParameter<"uint64_t", "0">:$fieldID,
-         DefaultValuedParameter<"::mlir::StringAttr", "public">:$sym_visibility
+         DefaultValuedParameter<"::mlir::StringAttr", "public">:$symVisibility
                      );
   let builders = [
     AttrBuilderWithInferredContext<(ins "::mlir::StringAttr":$sym),[{
@@ -122,7 +122,7 @@ def InnerSymProperties : AttrDef<HWDialect, "InnerSymProperties"> {
   ];
   let hasCustomAssemblyFormat = 1;
   // The assembly format is as follows:
-  // "`<` `@` $name `,` $fieldID `,` $sym_visibility `>`";
+  // "`<` `@` $name `,` $fieldID `,` $symVisibility `>`";
   let genVerifyDecl = 1;
 }
 
