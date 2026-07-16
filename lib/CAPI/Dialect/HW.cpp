@@ -19,8 +19,14 @@
 #include "llvm/ADT/PostOrderIterator.h"
 
 using namespace circt;
-using namespace circt::hw;
 
+// mlir-tblgen cannot generate CAPI calls for cit::hw::ParamExprAttr because 
+// it doesn't know that PEO is a type that shouldn't be wrapped. There is a 
+// hand modified implementation below
+#define NO_PARAMEXPRATTR_CAPI_DECL 1
+#include "circt/Dialect/HW/HWCAPIAttrs.cpp.inc"
+
+using namespace circt::hw;
 DEFINE_C_API_PTR_METHODS(HWInstanceGraph, InstanceGraph)
 DEFINE_C_API_PTR_METHODS(HWInstanceGraphNode, igraph::InstanceGraphNode)
 
@@ -30,6 +36,27 @@ DEFINE_C_API_PTR_METHODS(HWInstanceGraphNode, igraph::InstanceGraphNode)
 
 MLIR_DEFINE_CAPI_DIALECT_REGISTRATION(HW, hw, HWDialect)
 void registerHWPasses() { registerPasses(); }
+
+//===----------------------------------------------------------------------===//
+// ParamExprAttr - modified mlir-tblgen code
+//===----------------------------------------------------------------------===//
+
+// Skipping gettor 0 for ParamExprAttr, it has an unsupported parameter type 
+MLIR_CAPI_EXPORTED MlirTypeID circtHwParamExprAttrGetTypeID() {
+	return wrap(::circt::hw::ParamExprAttr::getTypeID());
+}
+MLIR_CAPI_EXPORTED bool mlirAttributeIsAcirctHwParamExprAttr(MlirAttribute attr) {
+	return llvm::isa<::circt::hw::ParamExprAttr>(unwrap(attr));
+}
+// Here is the by-hand change, don't wrap the return type, and return ::PEO
+// instead of circt::hw::PEO
+MLIR_CAPI_EXPORTED ::PEO circtHwParamExprAttrGetOpcode(MlirAttribute attr) {
+	return (::PEO)llvm::cast<::circt::hw::ParamExprAttr>(unwrap(attr)).getOpcode();
+}
+// Skipping accessor for unsupported parameter operands
+MLIR_CAPI_EXPORTED MlirType circtHwParamExprAttrGetType(MlirAttribute attr) {
+	return wrap(llvm::cast<::circt::hw::ParamExprAttr>(unwrap(attr)).getType());
+}
 
 //===----------------------------------------------------------------------===//
 // Type API.
@@ -274,12 +301,16 @@ MlirStringRef hwTypeAliasTypeGetScope(MlirType typeAlias) {
 // Attribute API.
 //===----------------------------------------------------------------------===//
 
+mlir::MLIRContext *get_string_attr_context(MlirAttribute attr) {
+  return llvm::cast<::mlir::StringAttr>(unwrap(attr)).getContext();
+}
+
 bool hwAttrIsAInnerSymAttr(MlirAttribute attr) {
-  return isa<InnerSymAttr>(unwrap(attr));
+  return mlirAttributeIsAcirctHwInnerSymAttr(attr);
 }
 
 MlirAttribute hwInnerSymAttrGet(MlirAttribute symName) {
-  return wrap(InnerSymAttr::get(cast<StringAttr>(unwrap(symName))));
+  return circtHwInnerSymAttrGetAlt1(wrap(get_string_attr_context(symName)), symName);
 }
 
 MlirAttribute hwInnerSymAttrGetEmpty(MlirContext ctx) {

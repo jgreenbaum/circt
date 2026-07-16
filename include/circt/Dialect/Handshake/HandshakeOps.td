@@ -317,6 +317,7 @@ def BufferCaseFIFO: I32EnumAttrCase<"fifo", 1>;
 def BufferTypeEnum: I32EnumAttr<
   "BufferTypeEnum", "BufferOp seq or fifo", [BufferCaseSeq, BufferCaseFIFO]> {
   let genSpecializedAttr = 0;
+  let cppNamespace = "::circt::handshake";
 }
 def BufferTypeEnumAttr: EnumAttr<Handshake_Dialect, BufferTypeEnum, "buffer_type_enum">;
 

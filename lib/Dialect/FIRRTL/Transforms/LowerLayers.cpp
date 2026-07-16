@@ -1223,7 +1223,7 @@ void LowerLayersPass::buildBindFile(CircuitNamespace &ns,
     // The parent bindfile will enable all ancestors.
     if (parent.getConvention() == LayerConvention::Bind) {
       auto target = bindFiles[module][parent].filename;
-      sv::IncludeOp::create(b, loc, IncludeStyle::Local, target);
+      sv::IncludeOp::create(b, loc, sv::IncludeStyle::Local, target);
       break;
     }
 
@@ -1254,9 +1254,10 @@ void LowerLayersPass::buildBindFile(CircuitNamespace &ns,
       continue;
     auto files = bindFiles[child];
     auto lookup = files.find(layer);
+
     if (lookup == files.end() || !lookup->second.effectful)
       continue;
-    sv::IncludeOp::create(b, loc, IncludeStyle::Local, lookup->second.filename);
+    sv::IncludeOp::create(b, loc, sv::IncludeStyle::Local, lookup->second.filename);
   }
 
   // Save the bind file information for later.

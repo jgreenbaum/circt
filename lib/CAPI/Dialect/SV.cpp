@@ -19,35 +19,4 @@ using namespace circt::sv;
 void registerSVPasses() { registerPasses(); }
 MLIR_DEFINE_CAPI_DIALECT_REGISTRATION(SystemVerilog, sv, SVDialect)
 
-bool svAttrIsASVAttributeAttr(MlirAttribute cAttr) {
-  return llvm::isa<SVAttributeAttr>(unwrap(cAttr));
-}
-
-MlirAttribute svSVAttributeAttrGet(MlirContext cCtxt, MlirStringRef cName,
-                                   MlirStringRef cExpression,
-                                   bool emitAsComment) {
-  mlir::MLIRContext *ctxt = unwrap(cCtxt);
-  mlir::StringAttr expr;
-  if (cExpression.data != nullptr)
-    expr = mlir::StringAttr::get(ctxt, unwrap(cExpression));
-  return wrap(
-      SVAttributeAttr::get(ctxt, mlir::StringAttr::get(ctxt, unwrap(cName)),
-                           expr, mlir::BoolAttr::get(ctxt, emitAsComment)));
-}
-
-MlirStringRef svSVAttributeAttrGetName(MlirAttribute cAttr) {
-  return wrap(llvm::cast<SVAttributeAttr>(unwrap(cAttr)).getName().getValue());
-}
-
-MlirStringRef svSVAttributeAttrGetExpression(MlirAttribute cAttr) {
-  auto expr = llvm::cast<SVAttributeAttr>(unwrap(cAttr)).getExpression();
-  if (expr)
-    return wrap(expr.getValue());
-  return {nullptr, 0};
-}
-
-bool svSVAttributeAttrGetEmitAsComment(MlirAttribute attribute) {
-  return llvm::cast<SVAttributeAttr>(unwrap(attribute))
-      .getEmitAsComment()
-      .getValue();
-}
+#include "circt/Dialect/SV/SVCAPIAttrs.cpp.inc"
