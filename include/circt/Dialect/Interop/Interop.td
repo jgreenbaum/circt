@@ -47,8 +47,8 @@ def InteropMechanismAttr : I32EnumAttr<
   "InteropMechanism",
   "interface through which interoperability is achieved",
   [CFFI, CPP]> {
-    let cppNamespace = "::circt::interop";
-}
+    let cppNamespace = "::circt::interop"; // Perhaps I32EnumAttr should jut get it from the dialect?
+  }
 
 //===----------------------------------------------------------------------===//
 // Interop Operations

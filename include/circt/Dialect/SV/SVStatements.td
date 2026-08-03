@@ -847,7 +847,7 @@ def MemBaseHex: I32EnumAttrCase<"MemBaseHex", 1>;
 def MemBaseTypeAttr :
     I32EnumAttr<"MemBaseTypeAttr", "the numeric base of a memory file",
                 [MemBaseBin, MemBaseHex]> {
-  let cppNamespace = "circt::sv";
+  let cppNamespace = "::circt::sv";
 }
 
 def ReadMemOp : SVOp<"readmem", [ProceduralOp]> {
@@ -1023,7 +1023,11 @@ def IncludeStyle
           [I32EnumAttrCase<"Local", 0, "local">,
            I32EnumAttrCase<"System", 1, "system">]> {
   let genSpecializedAttr = 0;
+<<<<<<< HEAD
   let cppNamespace = "circt::sv";
+=======
+  let cppNamespace = "::circt::sv";
+>>>>>>> b1d956e25 (First try, need a different llvm)
 }
 
 def IncludeStyleAttr : EnumAttr<SVDialect, IncludeStyle, "include_style">;

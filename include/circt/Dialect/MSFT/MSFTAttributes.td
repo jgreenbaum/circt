@@ -23,9 +23,9 @@ def PrimitiveType : I32EnumAttr<"PrimitiveType",
     I32EnumAttrCase<"M20K", 1>,
     I32EnumAttrCase<"DSP", 2>,
     I32EnumAttrCase<"FF", 3>,
-  ]>  {
-  let cppNamespace = "::circt::msft";
-}
+  ]> {
+    let cppNamespace = "::circt::msft";
+  }
 
 class MSFT_Attr<string name, list<Trait> traits = [],
                 string baseCppClass = "::mlir::Attribute">

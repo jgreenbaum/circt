@@ -100,8 +100,8 @@ def Arrow : I32EnumAttrCase<"Arrow", 1, "arrow">;
 
 def MemberAccessKindAttr : I32EnumAttr<"MemberAccessKind",
                                        "C++ member access kind",
-                                       [Dot, Arrow]>  {
-  let cppNamespace = "::circt::systemc";
+                                       [Dot, Arrow]> {
+  let cppNamespace = "::circt::sv";
 }
 
 def MemberAccessOp : SystemCOp<"cpp.member_access", [Pure]> {
