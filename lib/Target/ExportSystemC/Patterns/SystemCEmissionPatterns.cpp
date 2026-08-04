@@ -303,9 +303,9 @@ struct MemberAccessEmitter : OpEmissionPattern<MemberAccessOp> {
     p.getInlinable(op.getObject())
         .emitWithParensOnLowerPrecedence(Precedence::MEMBER_ACCESS);
 
-    if (op.getAccessKind() == MemberAccessKind::Arrow)
+    if (op.getAccessKind() == sv::MemberAccessKind::Arrow)
       p << "->";
-    else if (op.getAccessKind() == MemberAccessKind::Dot)
+    else if (op.getAccessKind() == sv::MemberAccessKind::Dot)
       p << ".";
     else
       p.emitError(op, "member access kind not implemented");

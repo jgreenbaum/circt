@@ -111,16 +111,16 @@ private:
     for (size_t i = 0; i < inputValues.size(); ++i) {
       Value member = MemberAccessOp::create(
           updateBuilder, loc, inputValues[i].getType(), state,
-          cast<StringAttr>(inputNames[i]), MemberAccessKind::Arrow);
+          cast<StringAttr>(inputNames[i]), sv::MemberAccessKind::Arrow);
       AssignOp::create(updateBuilder, loc, member,
                        updateOp.getBody()->getArgument(i + 1));
     }
 
     // Call 'eval'.
-    auto evalFunc = MemberAccessOp::create(
+    auto evalFunc = systemc::MemberAccessOp::create(
         updateBuilder, loc,
         FunctionType::get(updateBuilder.getContext(), {}, {}), state, "eval",
-        MemberAccessKind::Arrow);
+        sv::MemberAccessKind::Arrow);
 
     // TODO: this has to be changed to a systemc::CallIndirectOp once the PR is
     // merged, also remove the dependency to the func dialect from the cmake,
@@ -133,7 +133,7 @@ private:
       results.push_back(MemberAccessOp::create(
           updateBuilder, loc, resultValues[i].getType(), state,
           cast<StringAttr>(resultNames[i]).getValue(),
-          MemberAccessKind::Arrow));
+          sv::MemberAccessKind::Arrow));
     }
 
     interop::ReturnOp::create(updateBuilder, loc, results);
